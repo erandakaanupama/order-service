@@ -13,7 +13,7 @@ class Customer(
     @Id
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.TIME)
-    val id: UUID,
+    val id: UUID? = null,
     val name: String,
     val contactNo: String,
     val mapLocation: String

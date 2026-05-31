@@ -20,6 +20,7 @@ class Item(
     val name: String,
     val price: BigDecimal,
     val description: String,
+    val available: Boolean = true,
     @Convert(converter = MenuCategoryConverter::class)
     @Column(columnDefinition = "TINYINT")
     val category: MenuCategory

@@ -11,7 +11,7 @@ class Order(
     @Id
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.TIME)
-    val id: UUID,
+    val id: UUID? = null,
     val dateTime: LocalDateTime,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
