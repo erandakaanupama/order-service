@@ -3,84 +3,95 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS;
+SET UNIQUE_CHECKS = 0;
+
+SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS;
+SET FOREIGN_KEY_CHECKS = 0;
+
+SET @OLD_SQL_MODE = @@SQL_MODE;
+SET SQL_MODE = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,
+                NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema diningplate
 -- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `diningplate`
+    DEFAULT CHARACTER SET utf8;
+USE `diningplate`;
 
 -- -----------------------------------------------------
--- Schema diningplate
+-- Table `customer`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `diningplate` DEFAULT CHARACTER SET utf8 ;
-USE `diningplate` ;
+CREATE TABLE IF NOT EXISTS `customer` (
+                                          `id` BINARY(16) NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
+    `contact_no` VARCHAR(45) NOT NULL,
+    `map_location` VARCHAR(2048) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `diningplate`.`customer`
+-- Table `order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `diningplate`.`customer` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `contact_no` VARCHAR(45) NOT NULL,
-  `map_location` VARCHAR(2048) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `order` (
+                                       `id` BINARY(16) NOT NULL,
+    `date_time` DATETIME NOT NULL,
+    `customer_id` BINARY(16) NOT NULL,
+    `status` TINYINT NOT NULL,
+    `version` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
 
+    INDEX `fk_customer_id_idx` (`customer_id` ASC) VISIBLE,
 
--- -----------------------------------------------------
--- Table `diningplate`.`order`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `diningplate`.`order` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `date_time` DATETIME NOT NULL,
-  `customer_id` INT NOT NULL,
-  `status` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_customer_id_idx` (`customer_id` ASC) VISIBLE,
-  CONSTRAINT `fk_customer_id`
+    CONSTRAINT `fk_customer_id`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `diningplate`.`customer` (`id`)
+    REFERENCES `customer` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `diningplate`.`item`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `diningplate`.`item` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
+    ON UPDATE NO ACTION
+    ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `diningplate`.`order_item`
+-- Table `item`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `diningplate`.`order_item` (
-  `order_id` INT NOT NULL,
-  `item_id` INT NOT NULL,
-  `count` INT NOT NULL,
-  PRIMARY KEY (`order_id`, `item_id`),
-  INDEX `fk_order_id_idx` (`order_id` ASC) VISIBLE,
-  INDEX `fk_item_id_idx` (`item_id` ASC) VISIBLE,
-  CONSTRAINT `fk_order_id`
+CREATE TABLE IF NOT EXISTS `item` (
+                                      `id` BINARY(16) NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
+    `price` DECIMAL(10, 2) NOT NULL,
+    `description` VARCHAR(512) NULL,
+    `category` TINYINT NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `order_item`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `order_item` (
+                                            `order_id` BINARY(16) NOT NULL,
+    `item_id` BINARY(16) NOT NULL,
+    `count` INT NOT NULL,
+
+    PRIMARY KEY (`order_id`, `item_id`),
+
+    INDEX `fk_order_id_idx` (`order_id` ASC) VISIBLE,
+    INDEX `fk_item_id_idx` (`item_id` ASC) VISIBLE,
+
+    CONSTRAINT `fk_order_id`
     FOREIGN KEY (`order_id`)
-    REFERENCES `diningplate`.`order` (`id`)
+    REFERENCES `order` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_item_id`
+
+    CONSTRAINT `fk_item_id`
     FOREIGN KEY (`item_id`)
-    REFERENCES `diningplate`.`item` (`id`)
+    REFERENCES `item` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION
+    ) ENGINE = InnoDB;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- -----------------------------------------------------
+-- Restore settings
+-- -----------------------------------------------------
+SET SQL_MODE = @OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
