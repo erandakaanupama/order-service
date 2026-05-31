@@ -34,7 +34,7 @@ class OrderService(private val orderRepository: OrderRepository) : OrdersApiDele
     private fun Order.toApiModel(): ApiOrder {
         val apiItems = items.map { oi ->
             ApiOrderItem(
-                menuItemId = oi.item.id,
+                menuItemId = oi.item.id!!,
                 name = oi.item.name,
                 quantity = oi.count,
                 unitPrice = oi.item.price.toDouble()
