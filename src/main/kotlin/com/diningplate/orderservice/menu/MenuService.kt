@@ -19,13 +19,14 @@ class MenuService(private val menuRepository: MenuRepository) : MenuApiDelegate 
             name = createMenuItemRequest.name,
             price = BigDecimal.valueOf(createMenuItemRequest.price),
             description = createMenuItemRequest.description ?: "",
+            available = createMenuItemRequest.available ?: true,
             category = MenuCategory.valueOf(createMenuItemRequest.category.name)
         )
         val saved = menuRepository.save(item)
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved.toApiModel(createMenuItemRequest.available ?: true))
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved.toApiModel())
     }
 
-    private fun Item.toApiModel(available: Boolean) = MenuItem(
+    private fun Item.toApiModel() = MenuItem(
         id = id!!,
         name = name,
         price = price.toDouble(),

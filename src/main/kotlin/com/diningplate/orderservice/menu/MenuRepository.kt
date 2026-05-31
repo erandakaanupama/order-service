@@ -4,4 +4,6 @@ import com.diningplate.orderservice.model.Item
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface MenuRepository : JpaRepository<Item, UUID>
+interface MenuRepository : JpaRepository<Item, UUID> {
+    fun findByIdInAndAvailable(ids: Collection<UUID>, available: Boolean): List<Item>
+}
