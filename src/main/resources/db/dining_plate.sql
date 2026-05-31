@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `item` (
     `name` VARCHAR(45) NOT NULL,
     `price` DECIMAL(10, 2) NOT NULL,
     `description` VARCHAR(512) NULL,
+    `available` TINYINT(1) NOT NULL DEFAULT 1,
     `category` TINYINT NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE = InnoDB;
