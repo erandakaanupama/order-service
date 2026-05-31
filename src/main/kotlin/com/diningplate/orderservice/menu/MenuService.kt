@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.util.*
 import com.diningplate.orderservice.api.model.MenuCategory as ApiMenuCategory
 
 @Service
@@ -17,7 +16,6 @@ class MenuService(private val menuRepository: MenuRepository) : MenuApiDelegate 
 
     override fun createMenuItem(createMenuItemRequest: CreateMenuItemRequest): ResponseEntity<MenuItem> {
         val item = Item(
-            id = UUID.randomUUID(),
             name = createMenuItemRequest.name,
             price = BigDecimal.valueOf(createMenuItemRequest.price),
             description = createMenuItemRequest.description ?: "",
@@ -28,7 +26,7 @@ class MenuService(private val menuRepository: MenuRepository) : MenuApiDelegate 
     }
 
     private fun Item.toApiModel(available: Boolean) = MenuItem(
-        id = id,
+        id = id!!,
         name = name,
         price = price.toDouble(),
         category = ApiMenuCategory.valueOf(category.name),
