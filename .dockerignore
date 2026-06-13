@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+.kotlin/
+.claude/
+src/
+gradle/
+*.md
+*.bat
+gradlew
+build/libs/*-plain.jar
