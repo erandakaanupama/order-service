@@ -1,11 +1,12 @@
 spring:
   application:
     name: order-service
+  config:
+    import: optional:configserver:http://localhost:8090
+  profiles:
+    active: dev
 
   datasource:
-    url: jdbc:mysql://172.28.141.149:3307/diningplate
-    username: root
-    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
