@@ -24,3 +24,16 @@ spring:
   sql:
     init:
       mode: never
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8091/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
