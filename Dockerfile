@@ -14,8 +14,4 @@ COPY --from=builder /builder/extracted/dependencies/          ./
 COPY --from=builder /builder/extracted/spring-boot-loader/    ./
 COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
 COPY --from=builder /builder/extracted/application/           ./
-EXPOSE 8080
-ENV DB_HOST="" DB_PORT="3306" DB_NAME="" DB_USERNAME="" DB_PASSWORD=""
-ENV SPRING_CLOUD_CONFIG_URI="http://localhost:8090"
-ENV SPRING_PROFILES_ACTIVE="dev"
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
